@@ -177,3 +177,6 @@ SECRET_KEY = ')(hk77@)kryipr8&**1v5^h!$p$39(wj_oiypfl-^d4)d)7k5_'
 # AWS_SECRET_ACCESS_KEY =  os.environ.get('AWS_SECRET_KEY')
 # AWS_STORAGE_BUCKET_NAME = 'shopit-bucket'
 
+REST_FRAMEWORK = {
+    "PAGE_SIZE": 3
+}

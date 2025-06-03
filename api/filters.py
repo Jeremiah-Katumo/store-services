@@ -6,15 +6,14 @@ class ProductFilter(FilterSet):
         model = Product
         fields = {
             'category_id': ['exact'],
-            'category': ['exact'],
             'old_price': ['lt', 'gt', 'exact'],
-            # 'name': ['icontains'],
+            'name': ['icontains'],
         }
         
 class CategoryFilter(FilterSet):
     class Meta:
         model = Category
         fields = {
-            # 'name': ['icontains'],
+            'title': ['icontains'],
             'slug': ['exact'],
         }
