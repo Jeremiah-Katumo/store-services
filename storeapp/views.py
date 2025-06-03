@@ -5,13 +5,12 @@ from django.shortcuts import render, redirect
 from .models import Product, Cart, Cartitems, Category, SavedItem
 from django.http import JsonResponse
 from django.core import serializers
-from . forms import AddressForm
+from . forms import AddressForm, UpdateUserForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 import json
 import uuid
 from UserProfile.models import Address
-from .forms import UpdateUserForm
 from django.db.models import Q
 # Create your views here.
 
@@ -22,11 +21,10 @@ def index(request):
     # except:
     #     request.session['nonuser'] = str(uuid.uuid4())
     #     cart = Cart.objects.create(session_id = request.session['nonuser'], completed=False)
-        
     top_deal = Product.objects.filter(discount=True)
     categories = Category.objects.all()
     products = Product.objects.all()
-    context = {'top_deals': top_deal, 'categories':categories, 'products':products }
+    context = {'top_deals': top_deal, 'categories': categories, 'products': products }
     
     return render(request, 'storeapp/index.html', context)
 
@@ -34,6 +32,7 @@ def category(request, slug):
     category = Category.objects.get(slug=slug)
     products = Product.objects.filter(category=category)
     context = {'category': category, 'products': products}
+
     return render(request, 'storeapp/category.html', context)
     
 
@@ -91,6 +90,7 @@ def updateCart(request):
     msg = {
         'num_of_items': cart.num_of_items
     }
+
     return JsonResponse(msg, safe = False)
 
 def updateQuantity(request):
@@ -99,13 +99,15 @@ def updateQuantity(request):
     quantity = data['qty']
     price = data['product_price']
     product = Product.objects.get(id=product_id)
-   
+
     cart = Cart.objects.get(session_id = request.session['nonuser'], completed=False)
     cartitems, created = Cartitems.objects.get_or_create(product=product, cart=cart)
     cartitems.quantity = quantity
+
     if int(cartitems.quantity) == 0:
         cartitems.delete()
     cartitems.save()
+
     msg = {
         'num': cart.num_of_items,
         'qty': quantity,
@@ -140,6 +142,7 @@ def checkout(request):
     cartitems = cart.cartitems_set.all()
     customer = request.user.customer
     customer_address = Address.objects.filter(customer=customer)
+
     if customer_address:
         print(customer_address)
     else:
@@ -154,13 +157,14 @@ def checkout(request):
                 messages.info(request, 'Shipping info saved')
     
     context = {'cart': cart, 'form':form,'cartitems':cartitems, 'customer_address': customer_address}
+
     return render(request, 'storeapp/checkout.html', context)
 
 @login_required(login_url='signin')
 def account(request):
     customer = request.user.customer
     address = Address.objects.filter(customer=customer)
-    context = {'customer': customer, 'address':address}
+    context = {'customer': customer, 'address': address}
     return render(request, 'storeapp/account.html', context)
 
 @login_required(login_url='signin')
@@ -170,11 +174,13 @@ def confirmPayment(request):
     print(total)
     cart = Cart.objects.get(session_id = request.session['nonuser'], completed=False)
     print(cart.cart_total)
+
     if total == cart.cart_total:
         cart.completed = True
     else:
         messages.info(request, 'There is an issue with your purchase')
     cart.save()
+
     return JsonResponse('it is workking', safe=False)
 
 @login_required(login_url='signin')
