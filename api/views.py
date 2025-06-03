@@ -18,23 +18,22 @@ def api_products(request):
         return Response(serializer.data, status=status.HTTP_200_OK)
     elif request.method == 'POST':
         serializer = ProductSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def api_product(request, pk):
     product = get_object_or_404(Product, id=pk)
+
     if request.method == 'GET':
         serializer = ProductSerializer(product)
         return Response(serializer.data, status=status.HTTP_200_OK)
     elif request.method == 'PUT':
         serializer = ProductSerializer(product, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE':
         product.delete()
@@ -49,23 +48,22 @@ def api_categories(request):
         return Response(serializer.data, status=status.HTTP_200_OK)
     elif request.method == 'POST':
         serializer = CategorySerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def api_category(request, pk):
     category = get_object_or_404(Category, category_id=pk)
+
     if request.method == 'GET':
         serializer = CategorySerializer(category)
         return Response(serializer.data, status=status.HTTP_200_OK)
     elif request.method == 'PUT':
         serializer = CategorySerializer(category, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE':
         category.delete()
