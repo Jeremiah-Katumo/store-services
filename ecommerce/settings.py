@@ -26,7 +26,7 @@ SECRET_KEY = os.environ.get('AWS_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'my-shoppit.herokuapp.com', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'core',
     'UserProfile',
     'api',
-    'rest_framework'
+    'rest_framework',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -95,7 +96,7 @@ DATABASES = {
 #         'USER': os.environ.get('DB_USER'),
 #         'PASSWORD': os.environ.get('DB_PASSWORD'),
 #         'HOST': os.environ.get('DB_HOST', 'localhost'),
-#         'PORT': os.environ.get('DB_PORT'),
+#         'PORT': os.environ.get('DB_PORT_MYSQL'),
 #         # 'OPTIONS': {
 #         #     'unix_socket': '/opt/lampp/var/mysql/mysql.sock',
 #         # }
@@ -107,11 +108,11 @@ DATABASES = {
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'ecommerce',
+#         'NAME': os.environ.get('DB_NAME'),
 #         'USER': os.environ.get('DB_USER'),
-#         'PASSWORD': os.environ.get('DB_PASS'),
-#         'HOST':  os.environ.get('DB_HOST'),
-#         'PORT': '5432'
+#         'PASSWORD': os.environ.get('DB_PASSWORD'),
+#         'HOST':  os.environ.get('DB_HOST', 'localhost'),
+#         'PORT': os.environ.get('DB_PORT_POSTGRE'),
 #     }
 # }
 
