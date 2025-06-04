@@ -1,4 +1,3 @@
-from itertools import product
 from rest_framework import serializers
 from  storeapp.models import Category, Product, Review
 
