@@ -18,17 +18,28 @@ class Category(models.Model):
         return self.title
     
 
+class Review(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, unique=True)
+    description = models.TextField()
+    product = models.ForeignKey("Product", on_delete=models.CASCADE, blank=True, null=True, related_name="reviews")
+    date_created = models.DateTimeField(auto_now_add=True)
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.description
+    
+
 class Product(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
-    discount = models. BooleanField(default=False)
-    image = models.ImageField(upload_to = 'img',  blank = True, null=True, default='')
+    discount = models.BooleanField(default=False)
+    image = models.ImageField(upload_to='img', blank=True, null=True, default='')
     old_price = models.FloatField(default=100.00)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, blank=True, null=True, related_name='products')
     slug = models.SlugField(default=None)
     id = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, unique=True)
     inventory = models.IntegerField(default=5)
-    top_deal=models.BooleanField(default=False)
+    top_deal = models.BooleanField(default=False)
     flash_sales = models.BooleanField(default=False)
 
     @property
@@ -43,7 +54,6 @@ class Product(models.Model):
     def img(self):
         if self.image == "":
             self.image = ""
-        
         return self.image
 
     def __str__(self):

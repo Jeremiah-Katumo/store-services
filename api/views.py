@@ -8,7 +8,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework import status
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.pagination import PageNumberPagination
-from storeapp.models import Category, Product
+from storeapp.models import Category, Product, Review
 from . import serializers, filters
 
 # Create your views here.
@@ -37,3 +37,14 @@ class APICategoryView(ModelViewSet):
 # class APICategoryView(ListCreateAPIView):
 #     queryset = Category.objects.all()
 #     serializer_class = CategorySerializer
+
+class APIReviewViewSet(ModelViewSet):
+    # queryset = Review.objects.all()
+    serializer_class = serializers.ReviewSerializer
+    
+    def get_queryset(self):
+        Review.objects.filter(product_id=self.kwargs['product_pk'])
+
+    def get_serializer_context(self):
+        context = { "product_id": self.kwargs["product_pk"]}
+        return context
